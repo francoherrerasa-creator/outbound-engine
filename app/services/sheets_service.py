@@ -1,3 +1,5 @@
+import json
+import os
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
@@ -25,21 +27,30 @@ HEADERS = [
 ]
 
 
-def _get_sheet():
-    creds = Credentials.from_service_account_file(
+def _get_credentials():
+    creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+    if creds_json:
+        return Credentials.from_service_account_info(
+            json.loads(creds_json), scopes=SCOPES
+        )
+    return Credentials.from_service_account_file(
         GOOGLE_SHEETS_CREDENTIALS_FILE, scopes=SCOPES
     )
-    gc = gspread.authorize(creds)
+
+
+def _get_sheet():
+    gc = gspread.authorize(_get_credentials())
 
     if GOOGLE_SHEETS_ID:
         spreadsheet = gc.open_by_key(GOOGLE_SHEETS_ID)
-        sheet = spreadsheet.sheet1
+        sheet = spreadsheet.worksheet("Outbound")
     else:
         try:
-            sheet = gc.open(GOOGLE_SHEET_NAME).sheet1
+            sheet = gc.open(GOOGLE_SHEET_NAME).worksheet("Outbound")
         except gspread.SpreadsheetNotFound:
             spreadsheet = gc.create(GOOGLE_SHEET_NAME)
             sheet = spreadsheet.sheet1
+            sheet.update_title("Outbound")
             sheet.append_row(HEADERS)
             spreadsheet.share("", perm_type="anyone", role="writer")
 
