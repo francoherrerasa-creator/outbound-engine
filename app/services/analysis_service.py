@@ -64,6 +64,19 @@ Busca información actualizada sobre esta empresa en internet.
 
 El análisis debe ser CORTO y DIRECTO — es una empresa pequeña, no un corporativo.
 
+BÚSQUEDA AGRESIVA DE DECISION MAKER:
+Para encontrar al decision maker, busca en TODAS estas fuentes:
+1. Página de Facebook de la empresa (muchas PyMEs tienen el nombre del dueño en "Información")
+2. Google Maps reviews (a veces el dueño responde con su nombre)
+3. Directorio empresarial (Sección Amarilla, DENU, Kompass)
+4. Registro público de comercio (si hay acta constitutiva pública)
+5. Páginas de empleo (Indeed, Computrabajo — el contacto suele ser el dueño)
+6. WhatsApp Business (si el número aparece en web, el perfil puede tener el nombre)
+
+Si encuentras un teléfono de la empresa en CUALQUIER fuente, inclúyelo en telefono_empresa.
+Si encuentras un email, inclúyelo en email_empresa.
+El nombre del dueño de una empresa pequeña es el dato más valioso — búscalo agresivamente.
+
 Devuelve EXACTAMENTE un JSON con esta estructura:
 {{
     "resumen_ejecutivo": "Máximo 3 líneas: qué hace la empresa y por qué es buen prospecto",
