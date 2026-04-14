@@ -1,6 +1,12 @@
 import json
+import re
 import anthropic
 from app.config import ANTHROPIC_API_KEY
+
+
+def _strip_citations(text: str) -> str:
+    """Remueve tags <cite index="...">...</cite> dejando solo el texto interior."""
+    return re.sub(r'</?cite[^>]*>', '', text)
 
 
 def _build_context(company: dict, icp: dict) -> str:
@@ -30,7 +36,7 @@ CONTEXTO DEL ICP:
 
 
 def _parse_json(text: str, open_char: str = "{") -> dict | list:
-    text = text.strip()
+    text = _strip_citations(text).strip()
     if text.startswith("```"):
         lines = text.split("\n")
         text = "\n".join(lines[1:-1])
@@ -76,6 +82,7 @@ Devuelve EXACTAMENTE un JSON con esta estructura:
 }}
 
 IMPORTANTE: NO incluyas FODA, benchmark ni modelo de negocio — eso es solo para el análisis profundo.
+IMPORTANTE: NO incluyas tags de citación como <cite> en tu respuesta. Solo texto plano.
 Responde SOLO con el JSON, sin texto adicional."""
 
     response = client.messages.create(
@@ -116,6 +123,7 @@ Devuelve EXACTAMENTE un JSON con esta estructura:
     "benchmark": "Comparación con competidores principales en 2-3 frases"
 }}
 
+IMPORTANTE: NO incluyas tags de citación como <cite> en tu respuesta. Solo texto plano.
 Responde SOLO con el JSON, sin texto adicional."""
 
     response = client.messages.create(
