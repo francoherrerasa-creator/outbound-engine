@@ -336,20 +336,12 @@ function selectCompany(name) {
         <div class="analysis-section">
             <h3>Resumen Ejecutivo</h3>
             <p class="info-text">${esc(analysis.resumen_ejecutivo)}</p>
+            ${analysis.score_justification ? `<p class="info-text" style="margin-top:0.6rem;font-style:italic;color:var(--text-muted);font-size:0.85rem;">${esc(analysis.score_justification)}</p>` : ''}
         </div>
         ` : ''}
 
-        ${analysis.score_justification ? `<p class="info-text" style="margin-bottom:1.5rem;font-style:italic;">${esc(analysis.score_justification)}</p>` : ''}
-
-        <div class="analysis-section">
-            <h3>Senales de Compra Detectadas</h3>
-            <div class="tags">
-                ${(analysis.senales_compra || []).map(s => `<span class="tag">${esc(s)}</span>`).join('')}
-            </div>
-        </div>
-
-        <div class="analysis-section">
-            <h3>Contacto Ideal</h3>
+        <div class="analysis-section" style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.3);border-radius:12px;padding:1.1rem 1.25rem;">
+            <h3 style="color:var(--accent);margin-top:0;">&#128100; Contacto</h3>
             <div class="contact-info">
                 <div class="contact-row">
                     <span class="contact-label">Cargo:</span>
@@ -362,41 +354,43 @@ function selectCompany(name) {
                 ${contacto.linkedin_search ? `
                 <div class="contact-row">
                     <span class="contact-label">LinkedIn:</span>
-                    <a href="${esc(contacto.linkedin_search)}" target="_blank" rel="noopener" style="color:var(--accent);">Buscar en LinkedIn &#8599;</a>
+                    <a href="${esc(contacto.linkedin_search)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500;">Buscar en LinkedIn &#8599;</a>
                 </div>
                 ` : ''}
                 ${contacto.telefono_empresa ? `
                 <div class="contact-row">
                     <span class="contact-label">Teléfono:</span>
-                    <a href="tel:${esc(contacto.telefono_empresa)}" style="color:var(--accent);">${esc(contacto.telefono_empresa)}</a>
+                    <a href="tel:${esc(contacto.telefono_empresa)}" style="color:var(--accent);font-weight:500;">&#128222; ${esc(contacto.telefono_empresa)}</a>
                 </div>
                 ` : ''}
                 ${contacto.email_empresa ? `
                 <div class="contact-row">
                     <span class="contact-label">Email:</span>
-                    <a href="mailto:${esc(contacto.email_empresa)}" style="color:var(--accent);">${esc(contacto.email_empresa)}</a>
+                    <a href="mailto:${esc(contacto.email_empresa)}" style="color:var(--accent);font-weight:500;">&#9993; ${esc(contacto.email_empresa)}</a>
                 </div>
                 ` : ''}
                 ${contacto.approach ? `
-                <div class="contact-row">
-                    <span class="contact-label">Cómo contactar:</span>
-                    <span>${esc(contacto.approach)}</span>
+                <div class="contact-row" style="margin-top:0.5rem;padding-top:0.6rem;border-top:1px solid rgba(99,102,241,0.2);">
+                    <span class="contact-label">&#128161; Cómo contactar:</span>
+                    <span style="font-style:italic;">${esc(contacto.approach)}</span>
                 </div>
                 ` : ''}
             </div>
         </div>
 
         <div class="analysis-section">
-            <h3>Mensaje de Outreach</h3>
-            <div class="outreach-box">${esc(analysis.mensaje_outreach || 'No disponible')}</div>
+            <h3>Señales de Compra</h3>
+            <div class="tags">
+                ${(analysis.senales_compra || []).slice(0, 3).map(s => `<span class="tag">${esc(s)}</span>`).join('')}
+            </div>
         </div>
 
-        <div id="deep-analysis-container">
-            ${hasFoda ? deepSection : `
-                <button class="btn btn-outline-accent" onclick="loadDeepAnalysis('${escAttr(name)}')">
-                    &#128200; Ver analisis completo (FODA + Benchmark)
-                </button>
-            `}
+        <div class="analysis-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
+                <h3 style="margin:0;">Mensaje de Outreach</h3>
+                <button onclick="copyOutreach('${escAttr(name)}')" style="padding:0.35rem 0.85rem;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:0.8rem;font-weight:500;cursor:pointer;">&#128203; Copiar mensaje</button>
+            </div>
+            <div class="outreach-box">${esc(analysis.mensaje_outreach || 'No disponible')}</div>
         </div>
 
         ${status !== 'approved' && status !== 'rejected' ? `
@@ -415,7 +409,26 @@ function selectCompany(name) {
             </span>
         </div>
         `}
+
+        <div id="deep-analysis-container" style="margin-top:1.5rem;">
+            ${hasFoda ? deepSection : `
+                <div style="text-align:center;">
+                    <a href="#" onclick="event.preventDefault();loadDeepAnalysis('${escAttr(name)}')" style="color:var(--text-muted);font-size:0.85rem;text-decoration:underline;">Ver análisis profundo (FODA + Benchmark) &rarr;</a>
+                </div>
+            `}
+        </div>
     `;
+}
+
+function copyOutreach(name) {
+    const msg = (analyses[name] && analyses[name].mensaje_outreach) || '';
+    if (!msg) {
+        showToast('No hay mensaje para copiar', 'error');
+        return;
+    }
+    navigator.clipboard.writeText(msg)
+        .then(() => showToast('Mensaje copiado'))
+        .catch(() => showToast('No se pudo copiar', 'error'));
 }
 
 // ── Approve / Reject ────────────────────────────────────
