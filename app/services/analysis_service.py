@@ -56,20 +56,26 @@ def analyze_company_quick(company: dict, icp: dict) -> dict:
 
 Busca información actualizada sobre esta empresa en internet.
 
+El análisis debe ser CORTO y DIRECTO — es una empresa pequeña, no un corporativo.
+
 Devuelve EXACTAMENTE un JSON con esta estructura:
 {{
-    "resumen_ejecutivo": "Resumen de 2-3 frases: qué hace la empresa, por qué es buen prospecto",
-    "senales_compra": ["3-5 señales concretas detectadas"],
+    "resumen_ejecutivo": "Máximo 3 líneas: qué hace la empresa y por qué es buen prospecto",
+    "senales_compra": ["máximo 3 señales concretas detectadas"],
     "contacto_ideal": {{
-        "cargo": "Cargo del decisor ideal",
+        "cargo": "Cargo del decisor ideal (ej: Director General, Dueño, Gerente de Operaciones)",
         "nombre_sugerido": "Nombre real si lo encuentras, o 'Por investigar'",
-        "linkedin_hint": "Sugerencia de búsqueda en LinkedIn"
+        "linkedin_search": "URL en formato https://www.google.com/search?q=site:linkedin.com+NOMBRE+EMPRESA (reemplaza NOMBRE por el nombre sugerido y EMPRESA por el nombre de la empresa, separando palabras con +)",
+        "telefono_empresa": "Teléfono si está en la web, sino ''",
+        "email_empresa": "Email si está en la web, sino ''",
+        "approach": "1 frase sobre cómo contactarlo (ej: 'Contactar por WhatsApp mencionando que vimos su operación en Tampico')"
     }},
-    "mensaje_outreach": "Mensaje personalizado de 3-4 frases para primer contacto. Conecta lo que vende la empresa vendedora con un problema real del prospecto. Usa datos concretos.",
+    "mensaje_outreach": "Máximo 4 líneas. Tono directo y personal, como mensaje de WhatsApp (NO email corporativo). Tutea. Menciona un dato concreto del prospecto y conéctalo con un problema real que resuelve la empresa vendedora.",
     "score": 85,
     "score_justification": "Justificación del score 0-100"
 }}
 
+IMPORTANTE: NO incluyas FODA, benchmark ni modelo de negocio — eso es solo para el análisis profundo.
 Responde SOLO con el JSON, sin texto adicional."""
 
     response = client.messages.create(

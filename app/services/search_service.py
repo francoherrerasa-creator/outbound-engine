@@ -18,6 +18,20 @@ SOBRE LA EMPRESA VENDEDORA (extraído de su web):
 - Industrias que atiende: {', '.join(intel.get('industrias', []))}
 """
 
+    size_lower = (icp.get('company_size') or '').lower()
+    if any(k in size_lower for k in ["pequeñ", "micro"]):
+        size_instructions = """
+FILTRO DE TAMAÑO CRÍTICO:
+Busca SOLO empresas pequeñas con menos de 50 empleados. NO incluyas empresas grandes como Grupo Castores, FEMSA Logística, Bimbo Transport, etc. Busca transportistas independientes, empresas familiares, operadores con 1-20 camiones.
+"""
+    elif "median" in size_lower:
+        size_instructions = """
+FILTRO DE TAMAÑO CRÍTICO:
+Busca empresas de 50-200 empleados. NO incluyas corporativos con más de 500 empleados.
+"""
+    else:
+        size_instructions = ""
+
     prompt = f"""Eres un experto en investigación de mercado B2B. Necesito que busques en internet empresas REALES que coincidan con este Perfil de Cliente Ideal (ICP):
 
 - Empresa vendedora: {icp['company_name']}
@@ -27,6 +41,7 @@ SOBRE LA EMPRESA VENDEDORA (extraído de su web):
 - Tipo de cliente: {icp['client_type']}
 - Momento de la empresa objetivo: {icp['buying_signal']}
 {intel_block}
+{size_instructions}
 INSTRUCCIONES:
 1. Busca en la web empresas REALES que operen en la industria "{icp['target_industry']}" en la región "{icp['region']}"
 2. Que tengan el tamaño aproximado de "{icp['company_size']}"
@@ -45,7 +60,7 @@ Devuelve EXACTAMENTE un JSON array con 5 a 10 empresas reales. Cada objeto debe 
 Responde SOLO con el JSON array, sin texto adicional ni markdown."""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-5",
         max_tokens=4096,
         tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 10}],
         messages=[{"role": "user", "content": prompt}],

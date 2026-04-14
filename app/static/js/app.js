@@ -357,10 +357,30 @@ function selectCompany(name) {
                     <span class="contact-label">Nombre sugerido:</span>
                     <span>${esc(contacto.nombre_sugerido || 'Por investigar')}</span>
                 </div>
+                ${contacto.linkedin_search ? `
                 <div class="contact-row">
-                    <span class="contact-label">LinkedIn hint:</span>
-                    <span>${esc(contacto.linkedin_hint || 'N/A')}</span>
+                    <span class="contact-label">LinkedIn:</span>
+                    <a href="${esc(contacto.linkedin_search)}" target="_blank" rel="noopener" style="color:var(--accent);">Buscar en LinkedIn &#8599;</a>
                 </div>
+                ` : ''}
+                ${contacto.telefono_empresa ? `
+                <div class="contact-row">
+                    <span class="contact-label">Teléfono:</span>
+                    <a href="tel:${esc(contacto.telefono_empresa)}" style="color:var(--accent);">${esc(contacto.telefono_empresa)}</a>
+                </div>
+                ` : ''}
+                ${contacto.email_empresa ? `
+                <div class="contact-row">
+                    <span class="contact-label">Email:</span>
+                    <a href="mailto:${esc(contacto.email_empresa)}" style="color:var(--accent);">${esc(contacto.email_empresa)}</a>
+                </div>
+                ` : ''}
+                ${contacto.approach ? `
+                <div class="contact-row">
+                    <span class="contact-label">Cómo contactar:</span>
+                    <span>${esc(contacto.approach)}</span>
+                </div>
+                ` : ''}
             </div>
         </div>
 
