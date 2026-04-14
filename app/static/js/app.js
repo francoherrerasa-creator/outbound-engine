@@ -135,6 +135,8 @@ function renderResults() {
                     <span class="meta-tag">&#127970; ${esc(c.industry)}</span>
                     <span class="meta-tag">&#128205; ${esc(c.city || 'N/A')}</span>
                     <span class="meta-tag">&#128101; ${esc(c.size_estimate || 'N/A')}</span>
+                    ${c.phone ? `<a class="meta-tag meta-tag-phone" href="tel:${esc(c.phone)}" onclick="event.stopPropagation()">&#128222; ${esc(c.phone)}</a>` : ''}
+                    ${c.source ? `<span class="meta-tag meta-tag-source">${esc(c.source)}</span>` : ''}
                 </div>
                 ${c.why_matches ? `<div class="company-match">${esc(c.why_matches)}</div>` : ''}
             </div>
