@@ -21,8 +21,8 @@ HEADERS = [
     "Señales",
     "Etapa",
     "Score",
-    "Mensaje",
-    "Modelo de Negocio",
+    "Siguiente Acción",
+    "Fuente",
     "Notas",
 ]
 
@@ -80,9 +80,9 @@ def save_prospect(company: dict, analysis: dict) -> str:
         senales,
         "Identificado",
         analysis.get("score", ""),
-        analysis.get("mensaje_outreach", ""),
-        analysis.get("modelo_negocio", ""),
-        "",  # Notas - vacío para que el usuario complete
+        "Investigar decision maker",
+        "Outbound Engine",
+        "",
     ]
 
     sheet.append_row(row, value_input_option="USER_ENTERED")
