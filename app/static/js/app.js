@@ -199,7 +199,7 @@ async function analyzeAll() {
     }
 
     hideLoading();
-    showToast(`Analisis completado: ${Object.keys(analyses).length} empresas`);
+    showToast(`Análisis completado: ${Object.keys(analyses).length} empresas`);
 }
 
 // ── Deep analysis (FODA + benchmark on demand) ──────────
@@ -211,7 +211,7 @@ async function loadDeepAnalysis(companyName) {
     container.innerHTML = `
         <div class="deep-loading">
             <div class="mini-spinner"></div>
-            Generando analisis FODA y benchmark...
+            Generando análisis FODA y benchmark...
         </div>
     `;
 
@@ -267,7 +267,7 @@ function selectCompany(name) {
         detail.innerHTML = `
             <div class="empty-state">
                 <div class="icon">&#128270;</div>
-                <p>Esta empresa aun no ha sido analizada</p>
+                <p>Esta empresa aún no ha sido analizada</p>
                 <button class="btn btn-primary" onclick="analyzeSingle(${idx})">Analizar ahora</button>
             </div>
         `;
@@ -286,7 +286,7 @@ function selectCompany(name) {
         const foda = analysis.foda;
         deepSection = `
             <div class="analysis-section">
-                <h3>Analisis FODA</h3>
+                <h3>Análisis FODA</h3>
                 <div class="foda-grid">
                     <div class="foda-box f">
                         <h4>Fortalezas</h4>
