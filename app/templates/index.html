@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outbound Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo">
+        &#9670; Outbound <span>Engine</span>
+    </div>
+    <div class="steps">
+        <div class="step active" id="step-1">
+            <div class="step-num">1</div> ICP
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-2">
+            <div class="step-num">2</div> Buscar
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-3">
+            <div class="step-num">3</div> Analizar
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-4">
+            <div class="step-num">4</div> Aprobar
+        </div>
+    </div>
+</header>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-text">Buscando empresas con IA...</div>
+    <div class="loading-countdown" id="loading-countdown"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<main class="main">
+
+    <!-- STEP 1: ICP Form -->
+    <section class="section active" id="section-icp">
+        <h1 class="section-title">Define tu Cliente Ideal</h1>
+        <p class="section-subtitle">Completa el perfil ICP y nuestro motor de IA buscara empresas reales que encajen.</p>
+        <form id="icp-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="company_name">Tu empresa (vendedora)</label>
+                    <input type="text" id="company_name" placeholder="Ej: TechFlow Solutions" required>
+                </div>
+                <div class="form-group">
+                    <label for="company_url">URL de tu empresa</label>
+                    <input type="url" id="company_url" placeholder="Ej: https://www.tuempresa.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="target_industry">Industria objetivo</label>
+                    <input type="text" id="target_industry" placeholder="Ej: Logística y transporte" required>
+                </div>
+                <div class="form-group">
+                    <label for="company_size">Tamano de empresa objetivo</label>
+                    <select id="company_size" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="1-10 empleados">Micro (1-10 empleados)</option>
+                        <option value="11-50 empleados">Pequena (11-50)</option>
+                        <option value="51-200 empleados">Mediana (51-200)</option>
+                        <option value="201-1000 empleados">Grande (201-1000)</option>
+                        <option value="1000+ empleados">Corporativa (1000+)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="region">Region</label>
+                    <input type="text" id="region" placeholder="Ej: Mexico, LATAM, Espana" required>
+                </div>
+                <div class="form-group">
+                    <label for="client_type">Tipo de cliente</label>
+                    <input type="text" id="client_type" placeholder="Ej: Empresas con flota vehicular" required>
+                </div>
+                <div class="form-group">
+                    <label for="buying_signal">Momento de la empresa objetivo</label>
+                    <input type="text" id="buying_signal" placeholder="Ej: expansion a nuevas ciudades, ronda de inversion reciente, nuevo contrato grande, crecimiento de equipo, apertura de plantas" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btn-search">
+                    Buscar empresas con IA &#8594;
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- STEP 2: Search Results -->
+    <section class="section" id="section-results">
+        <h1 class="section-title">Empresas Encontradas</h1>
+        <p class="section-subtitle" id="results-subtitle"></p>
+
+        <div class="action-bar">
+            <span class="action-bar-text" id="results-count"></span>
+            <div style="display:flex;gap:0.75rem;">
+                <button class="btn btn-ghost" onclick="goToStep(1)">&#8592; Modificar ICP</button>
+                <button class="btn btn-primary" id="btn-analyze-all" onclick="analyzeAll()">
+                    Analizar todas &#8594;
+                </button>
+            </div>
+        </div>
+
+        <div class="companies-grid" id="companies-list"></div>
+    </section>
+
+    <!-- STEP 3 & 4: Analysis & Approval Queue -->
+    <section class="section" id="section-analysis">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+            <div>
+                <h1 class="section-title">Analisis y Aprobacion</h1>
+                <p class="section-subtitle" style="margin-bottom:0">Revisa cada prospecto y aprueba o rechaza.</p>
+            </div>
+            <button class="btn btn-ghost" onclick="goToStep(2)">&#8592; Volver a resultados</button>
+        </div>
+
+        <div class="analysis-container">
+            <div>
+                <div class="sidebar-list" id="sidebar-list"></div>
+            </div>
+            <div class="analysis-detail" id="analysis-detail">
+                <div class="empty-state">
+                    <div class="icon">&#9776;</div>
+                    <p>Selecciona una empresa para ver su analisis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
